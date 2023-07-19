@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="KtlintProjectConfiguration">
+    <treatAsErrors>false</treatAsErrors>
+    <disabledRules>
+      <list>
+        <option value="standard" />
+      </list>
+    </disabledRules>
+    <externalJarPaths>
+      <list>
+        <option value="$USER_HOME$/workspace/diktat/latest/diktat-1.2.5.jar" />
+      </list>
+    </externalJarPaths>
+  </component>
+</project>

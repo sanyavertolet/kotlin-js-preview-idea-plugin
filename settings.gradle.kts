@@ -1,3 +1,5 @@
+rootProject.name = "kotlin-js-preview"
+
 pluginManagement {
     repositories {
         mavenCentral()
@@ -5,4 +7,14 @@ pluginManagement {
     }
 }
 
-rootProject.name = "kotlin-js-preview"
+
+@Suppress("UnstableApiUsage")
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
+
+include("plugin")
+include("core")

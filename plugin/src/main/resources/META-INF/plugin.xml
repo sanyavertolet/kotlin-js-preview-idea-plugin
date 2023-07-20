@@ -14,14 +14,17 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>org.jetbrains.kotlin</depends>
 
+    <actions>
+        <action class="com.sanyavertolet.kotlinjspreview.BuildKotlinJsAction" text="Build Kotlin/JS"/>
+    </actions>
+
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <codeInsight.lineMarkerProvider
-                language="kotlin"
-                implementationClass="com.sanyavertolet.kotlinjspreview.JsPreviewLineMarkerProvider"
+        <runLineMarkerContributor language="kotlin"
+                implementationClass="com.sanyavertolet.kotlinjspreview.JsPreviewRunLineMarkerContributor"
         />
-
-
+        <notificationGroup id="js-preview-notification"
+                           displayType="BALLOON"/>
     </extensions>
 </idea-plugin>

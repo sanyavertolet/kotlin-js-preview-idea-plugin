@@ -10,6 +10,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.psi.JavaPsiFacade
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiIdentifier
@@ -22,7 +23,6 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.FileFilterUtils
 import org.jetbrains.kotlin.idea.configuration.GRADLE_SYSTEM_ID
 import org.jetbrains.kotlin.idea.util.application.runWriteAction
-import org.jetbrains.kotlin.idea.util.module
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import java.io.File
@@ -49,6 +49,12 @@ class BuildKotlinJsAction(private val psiElement: PsiElement? = null) : AnAction
         runWriteAction { copyProjectToTempDir(project) }
         runWriteAction { saveToFile(getTempProjectPathByProjectPath(project, path), modifiedMainText) }
         runBuildTaskForTempProject(project)
+        openBrowserWindow(project)
+    }
+
+    private fun openBrowserWindow(project: Project) {
+        val toolWindow = ToolWindowManager.getInstance(project).getToolWindow(PreviewToolWindowFactory.ID)
+        toolWindow?.activate(null)
     }
 
     private fun saveToFile(path: String, text: String) {
@@ -69,13 +75,9 @@ class BuildKotlinJsAction(private val psiElement: PsiElement? = null) : AnAction
 
         val previewComponentIdentifierString = getIdentifier() ?: return null
 
-//        psiElement.findDescendantOfType<KtExpression>().lastChild.prevSibling.prevSibling.prevSibling.prevSibling
-
         val newParameter = JavaPsiFacade.getElementFactory(project).createIdentifier(
             previewComponentIdentifierString,
         )
-
-        println(usage.module)
 
         val sourceText = usage.parent.text
 
@@ -108,12 +110,13 @@ class BuildKotlinJsAction(private val psiElement: PsiElement? = null) : AnAction
         val tempDirPath = "${projectBaseDir.path}/$BUILD_DIR/$tempDirName"
         val tempDir = LocalFileSystem.getInstance().refreshAndFindFileByPath(tempDirPath)
 
-        return if (tempDir?.exists() != true) {
-            projectBaseDir.createChildDirectoryIfNotCreated(BUILD_DIR)
-                .createChildDirectoryIfNotCreated(tempDirName)
-        } else {
-            throw NoSuchFileException("Could not create temp directory with path [${tempDirPath}]")
-        }
+        return tempDir?.let { file ->
+            if (file.exists()) {
+                tempDir
+            } else {
+                projectBaseDir.createChildDirectoryIfNotCreated(BUILD_DIR).createChildDirectoryIfNotCreated(tempDirName)
+            }
+        } ?: throw NoSuchFileException("Could not create temp directory with path [${tempDirPath}]")
     }
 
     private fun getIdentifier() = (psiElement as KtProperty).name

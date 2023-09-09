@@ -38,6 +38,8 @@ class PreviewToolWindowFactory : ToolWindowFactory {
         add(hideButton)
     }
     companion object {
-        const val DEFAULT_URL = "https://localhost:8080"
+        private const val DEFAULT_PORT = 8080
+        const val DEFAULT_URL = "https://localhost:$DEFAULT_PORT"
+        const val ID = "KotlinJsPreview"
     }
 }

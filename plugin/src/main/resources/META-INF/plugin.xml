@@ -27,7 +27,7 @@
         <notificationGroup id="js-preview-notification"
                            displayType="BALLOON"/>
         <toolWindow factoryClass="com.sanyavertolet.kotlinjspreview.PreviewToolWindowFactory"
-                    id="Preview"
+                    id="KotlinJsPreview"
                     anchor="right"
         />
     </extensions>

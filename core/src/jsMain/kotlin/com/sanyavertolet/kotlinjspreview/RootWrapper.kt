@@ -1,6 +1,7 @@
 package com.sanyavertolet.kotlinjspreview
 
 @Suppress("unused")
-@Target(AnnotationTarget.PROPERTY)
+@Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.SOURCE)
-annotation class JsPreview
+@MustBeDocumented
+annotation class RootWrapper

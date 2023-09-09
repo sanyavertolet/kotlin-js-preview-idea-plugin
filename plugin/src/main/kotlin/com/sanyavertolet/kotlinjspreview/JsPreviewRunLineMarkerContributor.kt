@@ -7,14 +7,11 @@ import org.jetbrains.kotlin.idea.util.hasAnnotationWithShortName
 import org.jetbrains.kotlin.psi.KtProperty
 
 class JsPreviewRunLineMarkerContributor : RunLineMarkerContributor() {
-    override fun getInfo(element: PsiElement): Info? = if (element is KtProperty &&
-        element.isTopLevel && element.hasAnnotationWithShortName("JsPreview")
-    ) {
-        Info(
-            AllIcons.Actions.Execute,
-            null,
-            BuildKotlinJsAction(),
-        )
+    private fun PsiElement.isAnnotatedWith(annotationShortName: String) = this is KtProperty &&
+        isTopLevel && hasAnnotationWithShortName(annotationShortName)
+
+    override fun getInfo(element: PsiElement): Info? = if (element.isAnnotatedWith("JsPreview")) {
+        Info(AllIcons.Actions.Execute, { "Run preview" }, BuildKotlinJsAction(element))
     } else {
         null
     }

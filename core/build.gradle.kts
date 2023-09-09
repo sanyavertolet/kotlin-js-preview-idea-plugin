@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
-
 plugins {
     id("org.jetbrains.kotlin.multiplatform") version "1.9.0"
 }
@@ -22,9 +20,6 @@ kotlin {
                     enabled.set(true)
                 }
             }
-            webpackTask(Action<KotlinWebpack> {
-                mainOutputFileName.set("js-preview.js")
-            })
         }
     }
 

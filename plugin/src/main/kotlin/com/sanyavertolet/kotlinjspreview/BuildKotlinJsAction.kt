@@ -162,9 +162,6 @@ class BuildKotlinJsAction(private val psiElement: PsiElement? = null) : AnAction
         }
 
     companion object {
-        private const val PROJECT_TEMP_DIR_NAME = "jsPreviewTemp"
-        private const val BUILD_DIR = "build"
-
         private val copyIgnoreFileNames = listOf(
             ".idea",
             ".gradle",
@@ -176,5 +173,3 @@ class BuildKotlinJsAction(private val psiElement: PsiElement? = null) : AnAction
 }
 
 data class ModifiedFile(val path: String, val modifiedText: String, val sourceText: String)
-
-private const val NO_PROJECT_DIR = "Could not find project dir"

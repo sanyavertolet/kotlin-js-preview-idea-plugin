@@ -1,5 +1,7 @@
 package com.sanyavertolet.kotlinjspreview
 
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
 
@@ -9,3 +11,14 @@ fun VirtualFile.createChildDirectoryIfNotCreated(dirName: String): VirtualFile {
 }
 
 fun VirtualFile?.orException(messageBuilder: () -> String = { "" }) = this ?: throw IllegalStateException(messageBuilder())
+
+fun Project.getPathOrException(
+    exceptionMessageBuilder: () -> String = { "" }
+) = guessProjectDir().orException(exceptionMessageBuilder)
+
+const val NO_PROJECT_DIR = "Could not find project dir"
+
+const val PROJECT_TEMP_DIR_NAME = "jsPreviewTemp"
+
+const val BUILD_DIR = "build"
+

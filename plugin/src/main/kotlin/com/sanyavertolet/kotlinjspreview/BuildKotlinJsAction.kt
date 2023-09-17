@@ -13,7 +13,6 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.psi.JavaPsiFacade
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiIdentifier
 import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiReference
 import com.intellij.psi.search.GlobalSearchScope
@@ -21,9 +20,11 @@ import com.intellij.psi.search.searches.AnnotatedElementsSearch
 import com.intellij.psi.search.searches.ReferencesSearch
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.FileFilterUtils
+import org.jetbrains.kotlin.idea.base.utils.fqname.getKotlinFqName
 import org.jetbrains.kotlin.idea.configuration.GRADLE_SYSTEM_ID
 import org.jetbrains.kotlin.idea.util.application.runWriteAction
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtValueArgumentList
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import java.io.File
 import java.nio.file.NoSuchFileException
@@ -45,8 +46,10 @@ class BuildKotlinJsAction(private val psiElement: PsiElement? = null) : AnAction
         psiElement ?: return
         val project = getEventProject(event) ?: return
 
-        val (path, modifiedMainText) = replaceWrapper(project) ?: return
         runWriteAction { copyProjectToTempDir(project) }
+
+        val (path, modifiedMainText) = replaceWrapper(project) ?: return
+
         runWriteAction { saveToFile(getTempProjectPathByProjectPath(project, path), modifiedMainText) }
         runBuildTaskForTempProject(project)
         openBrowserWindow(project)
@@ -71,20 +74,20 @@ class BuildKotlinJsAction(private val psiElement: PsiElement? = null) : AnAction
 
     private fun replaceWrapper(project: Project): ModifiedFile? {
         psiElement ?: return null
-        val usage = findWrapperUsage(project)?.resolve() ?: return null
+        val usage = findWrapperUsage(project)?.element ?: return null
 
-        val previewComponentIdentifierString = getIdentifier() ?: return null
+        val previewComponentIdentifierString = getIdentifier()?.asString() ?: return null
 
         val newParameter = JavaPsiFacade.getElementFactory(project).createIdentifier(
             previewComponentIdentifierString,
         )
 
-        val sourceText = usage.parent.text
+        val sourceText = usage.containingFile.text
 
-        usage.parent.findDescendantOfType<PsiElement> { it is PsiIdentifier }
+        usage.parent.findDescendantOfType<KtValueArgumentList>()?.firstChild?.nextSibling
             ?.replace(newParameter)
 
-        return ModifiedFile(usage.containingFile.virtualFile.path, usage.parent.text, sourceText)
+        return ModifiedFile(usage.containingFile.virtualFile.path, usage.containingFile.text, sourceText)
     }
 
     private fun copyProjectToTempDir(project: Project){
@@ -119,7 +122,7 @@ class BuildKotlinJsAction(private val psiElement: PsiElement? = null) : AnAction
         } ?: throw NoSuchFileException("Could not create temp directory with path [${tempDirPath}]")
     }
 
-    private fun getIdentifier() = (psiElement as KtProperty).name
+    private fun getIdentifier() = (psiElement as KtProperty).getKotlinFqName()
 
     private fun findWrapperUsage(project: Project): PsiReference? {
         val wrapper = findWrapper(project) ?: return null

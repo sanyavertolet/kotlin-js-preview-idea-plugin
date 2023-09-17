@@ -4,6 +4,9 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.idea.base.utils.fqname.getKotlinFqName
+import org.jetbrains.kotlin.psi.KtProperty
 
 fun VirtualFile.createChildDirectoryIfNotCreated(dirName: String): VirtualFile {
     val file = LocalFileSystem.getInstance().refreshAndFindFileByPath("$path/$dirName")
@@ -16,9 +19,9 @@ fun Project.getPathOrException(
     exceptionMessageBuilder: () -> String = { "" }
 ) = guessProjectDir().orException(exceptionMessageBuilder)
 
-const val NO_PROJECT_DIR = "Could not find project dir"
+fun PsiElement.getIdentifier() = (this as KtProperty).getKotlinFqName()
 
-const val PROJECT_TEMP_DIR_NAME = "jsPreviewTemp"
+const val NO_PROJECT_DIR = "Could not find project dir"
 
 const val BUILD_DIR = "build"
 

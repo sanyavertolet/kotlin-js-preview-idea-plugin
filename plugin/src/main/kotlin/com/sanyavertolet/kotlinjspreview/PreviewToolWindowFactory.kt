@@ -5,6 +5,7 @@ import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.ContentFactory
 import com.intellij.ui.jcef.JBCefBrowser
+import com.sanyavertolet.kotlinjspreview.config.PluginConfig
 import org.cef.browser.CefBrowser
 import java.awt.BorderLayout
 import java.awt.event.ActionEvent
@@ -12,6 +13,8 @@ import javax.swing.JButton
 import javax.swing.JPanel
 
 class PreviewToolWindowFactory : ToolWindowFactory {
+    private val config: PluginConfig = PluginConfig.getInstance()
+
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         val content = ContentFactory.getInstance()
             .createContent(getPanelContent(project, toolWindow), "", false)
@@ -34,9 +37,9 @@ class PreviewToolWindowFactory : ToolWindowFactory {
             .build()
     }
 
-    fun getPathToHtml(project: Project) = project.getPathOrException { NO_PROJECT_DIR }
+    private fun getPathToHtml(project: Project) = project.getPathOrException { NO_PROJECT_DIR }
         .let { file ->
-            "file://${file.path}/$BUILD_DIR/$PROJECT_TEMP_DIR_NAME/$BUILD_DIR/dist/js/productionExecutable/index.html"
+            "file://${file.path}/$BUILD_DIR/${config.tempProjectDirName}/$BUILD_DIR/dist/js/productionExecutable/index.html"
         }
 
     private fun getControlsPanel(toolWindow: ToolWindow) = JPanel().apply {
@@ -44,6 +47,7 @@ class PreviewToolWindowFactory : ToolWindowFactory {
         hideButton.addActionListener { _: ActionEvent? -> toolWindow.hide(null) }
         add(hideButton)
     }
+
     companion object {
         const val ID = "KotlinJsPreview"
     }

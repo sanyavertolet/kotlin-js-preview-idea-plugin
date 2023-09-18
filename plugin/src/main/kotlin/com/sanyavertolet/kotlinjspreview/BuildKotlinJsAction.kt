@@ -8,6 +8,7 @@ import com.intellij.psi.PsiElement
 import com.sanyavertolet.kotlinjspreview.builder.GradleBuilder
 import com.sanyavertolet.kotlinjspreview.copier.RecursiveProjectCopier
 import com.sanyavertolet.kotlinjspreview.substituror.AstSubstitutor
+import org.jetbrains.kotlin.idea.util.application.runReadAction
 
 /**
  * @JsPreview
@@ -28,11 +29,12 @@ class BuildKotlinJsAction(
         projectCopier.copy(project)
         substitutor.substitute(psiElement, project)
         builder.build(project)
+
         openBrowserWindow(project)
     }
 
     private fun openBrowserWindow(project: Project) {
         val toolWindow = ToolWindowManager.getInstance(project).getToolWindow(PreviewToolWindowFactory.ID)
-        toolWindow?.activate(null)
+        runReadAction { toolWindow?.activate(null) }
     }
 }

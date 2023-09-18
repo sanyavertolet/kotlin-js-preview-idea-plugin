@@ -21,9 +21,7 @@ class RecursiveProjectCopier: ProjectCopier {
     override fun copy(project: Project) {
         val tempDir = runWriteAction { createTempDir(project) }
         val projectDir = project.guessProjectDir().orException { NO_PROJECT_DIR }
-        runWriteAction {
-            copyFilesRecursively(projectDir, tempDir)
-        }
+        runWriteAction { copyFilesRecursively(projectDir, tempDir) }
     }
 
     private fun copyFilesRecursively(source: VirtualFile, dist: VirtualFile) {

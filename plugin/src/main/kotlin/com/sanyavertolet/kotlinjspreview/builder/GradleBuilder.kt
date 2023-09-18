@@ -5,19 +5,19 @@ import com.intellij.openapi.externalSystem.model.execution.ExternalSystemTaskExe
 import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode
 import com.intellij.openapi.externalSystem.util.ExternalSystemUtil
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.project.guessProjectDir
 import com.sanyavertolet.kotlinjspreview.BUILD_DIR
 import com.sanyavertolet.kotlinjspreview.NO_PROJECT_DIR
 import com.sanyavertolet.kotlinjspreview.config.PluginConfig
-import com.sanyavertolet.kotlinjspreview.orException
+import com.sanyavertolet.kotlinjspreview.getPathOrException
 import com.sanyavertolet.kotlinjspreview.task.JsPreviewNotifierCallback
 import org.jetbrains.kotlin.idea.configuration.GRADLE_SYSTEM_ID
+import org.jetbrains.kotlin.idea.util.application.runWriteAction
 import java.util.*
 
 class GradleBuilder : Builder {
     private val config: PluginConfig = PluginConfig.getInstance()
 
-    override fun build(project: Project) = runBuildTaskForTempProject(project)
+    override fun build(project: Project) = runWriteAction { runBuildTaskForTempProject(project) }
 
     private fun runBuildTaskForTempProject(project: Project) = ExternalSystemUtil.runTask(
         getBuildSettings(project),
@@ -31,8 +31,7 @@ class GradleBuilder : Builder {
 
     private fun getBuildSettings(project: Project) = ExternalSystemTaskExecutionSettings()
         .apply {
-            val tempProjectPath = project.guessProjectDir()
-                .orException { NO_PROJECT_DIR }
+            val tempProjectPath = project.getPathOrException { NO_PROJECT_DIR }
                 .let { "${it.path}/$BUILD_DIR/${config.tempProjectDirName}" }
             externalProjectPath = tempProjectPath
             taskNames = Collections.singletonList(BUILD_COMMAND)

@@ -6,11 +6,11 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.ContentFactory
 import com.intellij.ui.jcef.JBCefBrowser
 import com.sanyavertolet.kotlinjspreview.config.PluginConfig
-import org.cef.browser.CefBrowser
 import java.awt.BorderLayout
 import java.awt.event.ActionEvent
 import javax.swing.JButton
 import javax.swing.JPanel
+
 
 class PreviewToolWindowFactory : ToolWindowFactory {
     private val config: PluginConfig = PluginConfig.getInstance()
@@ -21,19 +21,19 @@ class PreviewToolWindowFactory : ToolWindowFactory {
         toolWindow.contentManager.addContent(content)
     }
 
-    private fun getPanelContent(project: Project, toolWindow: ToolWindow): JPanel = JPanel().apply {
-        add(getControlsPanel(toolWindow), BorderLayout.CENTER)
+    private fun getPanelContent(project: Project, toolWindow: ToolWindow): JPanel = JPanel(BorderLayout()).apply {
         val browser = getBrowser(getPathToHtml(project))
-        add(browser.component, BorderLayout.CENTER)
+        add(getControlsPanel(toolWindow, browser), BorderLayout.CENTER)
+        add(browser.component, BorderLayout.SOUTH)
         browser.loadURL(getPathToHtml(project))
     }
 
     @Suppress("SameParameterValue")
     private fun getBrowser(uri: String) = JBCefBrowser(uri).apply {
-        val myDevTools: CefBrowser = cefBrowser.devTools
         JBCefBrowser.createBuilder()
-            .setCefBrowser(myDevTools)
+            .setCefBrowser(cefBrowser.devTools)
             .setClient(jbCefClient)
+            .setEnableOpenDevToolsMenuItem(true)
             .build()
     }
 
@@ -42,10 +42,25 @@ class PreviewToolWindowFactory : ToolWindowFactory {
             "file://${file.path}/$BUILD_DIR/${config.tempProjectDirName}/$BUILD_DIR/dist/js/productionExecutable/index.html"
         }
 
-    private fun getControlsPanel(toolWindow: ToolWindow) = JPanel().apply {
-        val hideButton = JButton("Hide")
-        hideButton.addActionListener { _: ActionEvent? -> toolWindow.hide(null) }
+    @Suppress("UNUSED_PARAMETER")
+    private fun getControlsPanel(toolWindow: ToolWindow, cefBrowser: JBCefBrowser) = JPanel().apply {
+        val hideButton = JButton("Reload")
+        hideButton.addActionListener { _: ActionEvent? -> cefBrowser.cefBrowser.reloadIgnoreCache() }
+        val zoomOutButton = JButton("-").apply {
+            addActionListener {
+                val currentZoom = cefBrowser.zoomLevel
+                cefBrowser.zoomLevel = currentZoom - 0.5 // Adjust this value as necessary
+            }
+        }
+        val zoomInButton = JButton("+").apply {
+            addActionListener {
+                val currentZoom = cefBrowser.zoomLevel
+                cefBrowser.zoomLevel = currentZoom + 0.5
+            }
+        }
         add(hideButton)
+        add(zoomOutButton)
+        add(zoomInButton)
     }
 
     companion object {

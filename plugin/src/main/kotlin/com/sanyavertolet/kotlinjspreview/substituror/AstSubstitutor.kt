@@ -1,17 +1,20 @@
 package com.sanyavertolet.kotlinjspreview.substituror
 
 import com.intellij.openapi.project.Project
-import com.intellij.psi.JavaPsiFacade
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiMethod
-import com.intellij.psi.PsiReference
+import com.intellij.openapi.vfs.LocalFileSystem
+import com.intellij.psi.*
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.searches.AnnotatedElementsSearch
 import com.intellij.psi.search.searches.ReferencesSearch
+import com.sanyavertolet.kotlinjspreview.BUILD_DIR
+import com.sanyavertolet.kotlinjspreview.config.PluginConfig
 import com.sanyavertolet.kotlinjspreview.getIdentifier
+import com.sanyavertolet.kotlinjspreview.getPathOrException
 import org.jetbrains.kotlin.idea.util.application.runWriteAction
+import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtValueArgumentList
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
+import java.io.File
 
 class AstSubstitutor: Substitutor {
     override fun substitute(psiElement: PsiElement, project: Project) = runWriteAction {
@@ -37,17 +40,32 @@ class AstSubstitutor: Substitutor {
         return usages.findFirst()
     }
 
+    private fun getPathToFileInTempProject(psiElement: PsiElement, project: Project): String {
+        val pathToFile = psiElement.containingFile.virtualFile.path
+        val pathToProject = project.getPathOrException().path
+        val config = PluginConfig.getInstance()
+        return pathToFile.replace(pathToProject, "$pathToProject/$BUILD_DIR/${config.tempProjectDirName}")
+    }
+
     // TODO: fix replace so that it would replace only in temp project
     private fun replaceWrapper(psiElement: PsiElement, project: Project) {
         val usage = findWrapperUsage(project)?.element ?: return
 
-        val previewComponentIdentifierString = psiElement.getIdentifier()?.asString() ?: return
+        val pathToTempFile = getPathToFileInTempProject(usage, project)
+
+        val virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(File(pathToTempFile)) ?: return
+        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) ?: return
+
+        val previewComponentIdentifierString = psiElement.getIdentifier()?.shortName()?.asString() ?: return
 
         val newParameter = JavaPsiFacade.getElementFactory(project).createIdentifier(
             previewComponentIdentifierString,
         )
 
-        usage.parent.findDescendantOfType<KtValueArgumentList>()?.firstChild?.nextSibling
+        psiFile.findDescendantOfType<KtFunction> { it.name == "main" }
+            ?.findDescendantOfType<KtValueArgumentList>()
+            ?.firstChild
+            ?.nextSibling
             ?.replace(newParameter)
 
         return

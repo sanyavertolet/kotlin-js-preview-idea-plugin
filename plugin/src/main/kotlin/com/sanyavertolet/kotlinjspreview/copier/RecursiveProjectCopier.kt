@@ -34,7 +34,7 @@ class RecursiveProjectCopier: ProjectCopier {
                 *config.copyIgnoreFileNames.map { FileFilterUtils.nameFileFilter(it) }.toTypedArray()
             )
         )
-        runWriteAction { FileUtils.copyDirectory(sourceFile, distFile, dirFilter) }
+        FileUtils.copyDirectory(sourceFile, distFile, dirFilter)
     }
 
     private fun createTempDir(project: Project): VirtualFile {

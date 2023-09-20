@@ -5,10 +5,10 @@ import com.intellij.openapi.externalSystem.model.execution.ExternalSystemTaskExe
 import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode
 import com.intellij.openapi.externalSystem.util.ExternalSystemUtil
 import com.intellij.openapi.project.Project
-import com.sanyavertolet.kotlinjspreview.BUILD_DIR
-import com.sanyavertolet.kotlinjspreview.NO_PROJECT_DIR
+import com.sanyavertolet.kotlinjspreview.utils.BUILD_DIR
+import com.sanyavertolet.kotlinjspreview.utils.NO_PROJECT_DIR
 import com.sanyavertolet.kotlinjspreview.config.PluginConfig
-import com.sanyavertolet.kotlinjspreview.getPathOrException
+import com.sanyavertolet.kotlinjspreview.utils.getPathOrException
 import com.sanyavertolet.kotlinjspreview.task.JsPreviewNotifierCallback
 import org.jetbrains.kotlin.idea.configuration.GRADLE_SYSTEM_ID
 import org.jetbrains.kotlin.idea.util.application.runWriteAction

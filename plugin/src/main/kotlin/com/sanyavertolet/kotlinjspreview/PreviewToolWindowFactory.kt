@@ -6,6 +6,9 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.ContentFactory
 import com.intellij.ui.jcef.JBCefBrowser
 import com.sanyavertolet.kotlinjspreview.config.PluginConfig
+import com.sanyavertolet.kotlinjspreview.utils.BUILD_DIR
+import com.sanyavertolet.kotlinjspreview.utils.NO_PROJECT_DIR
+import com.sanyavertolet.kotlinjspreview.utils.getPathOrException
 import java.awt.BorderLayout
 import java.awt.event.ActionEvent
 import javax.swing.JButton

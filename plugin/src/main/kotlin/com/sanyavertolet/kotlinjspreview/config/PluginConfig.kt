@@ -21,9 +21,7 @@ data class PluginConfig(
     }
 
     companion object {
-        fun getInstance(): PluginConfig {
-            return service<PluginConfig>()
-        }
+        fun getInstance(): PluginConfig = service<PluginConfig>()
 
         const val DEFAULT_TEMP_PROJECT_DIR_NAME = "jsPreviewTemp"
         val defaultCopyIgnoreFileNames = listOf(

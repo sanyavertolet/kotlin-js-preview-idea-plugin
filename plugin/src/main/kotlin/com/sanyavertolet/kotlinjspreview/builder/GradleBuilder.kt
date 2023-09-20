@@ -25,8 +25,8 @@ class GradleBuilder : Builder {
         project,
         GRADLE_SYSTEM_ID,
         JsPreviewNotifierCallback(project),
-        ProgressExecutionMode.NO_PROGRESS_ASYNC,
-        true,
+        ProgressExecutionMode.IN_BACKGROUND_ASYNC,
+        false,
     )
 
     private fun getBuildSettings(project: Project) = ExternalSystemTaskExecutionSettings()
@@ -34,12 +34,12 @@ class GradleBuilder : Builder {
             val tempProjectPath = project.getPathOrException { NO_PROJECT_DIR }
                 .let { "${it.path}/$BUILD_DIR/${config.tempProjectDirName}" }
             externalProjectPath = tempProjectPath
-            taskNames = Collections.singletonList(BUILD_COMMAND)
+            taskNames = Collections.singletonList(BUILD_COMMAND_TASK_NAME)
             externalSystemIdString = GRADLE_SYSTEM_ID.id
             vmOptions = ""
         }
 
     companion object {
-        private const val BUILD_COMMAND = "jsBrowserDistribution"
+        private const val BUILD_COMMAND_TASK_NAME = "jsBrowserDistribution"
     }
 }

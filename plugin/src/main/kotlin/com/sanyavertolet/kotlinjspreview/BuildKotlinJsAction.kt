@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.psi.PsiElement
 import com.sanyavertolet.kotlinjspreview.builder.GradleBuilder
-import com.sanyavertolet.kotlinjspreview.copier.RecursiveProjectCopier
+import com.sanyavertolet.kotlinjspreview.copier.SimpleProjectCopier
 import com.sanyavertolet.kotlinjspreview.substituror.AstSubstitutor
 import org.jetbrains.kotlin.idea.util.application.runReadAction
 
@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.idea.util.application.runReadAction
 class BuildKotlinJsAction(
     private val psiElement: PsiElement? = null,
 ) : AnAction() {
-    private val projectCopier = RecursiveProjectCopier()
+    private val projectCopier = SimpleProjectCopier()
     private val builder = GradleBuilder()
     private val substitutor = AstSubstitutor()
 

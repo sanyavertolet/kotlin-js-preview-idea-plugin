@@ -47,7 +47,6 @@ class AstSubstitutor: Substitutor {
         return pathToFile.replace(pathToProject, "$pathToProject/$BUILD_DIR/${config.tempProjectDirName}")
     }
 
-    // TODO: fix replace so that it would replace only in temp project
     private fun replaceWrapper(psiElement: PsiElement, project: Project) {
         val usage = findWrapperUsage(project)?.element ?: return
 
@@ -67,6 +66,12 @@ class AstSubstitutor: Substitutor {
             ?.firstChild
             ?.nextSibling
             ?.replace(newParameter)
+
+        val psiDocumentManager = PsiDocumentManager.getInstance(project)
+        val document = psiDocumentManager.getCachedDocument(psiFile)
+        if (document != null) {
+            psiDocumentManager.commitDocument(document)
+        }
 
         return
     }

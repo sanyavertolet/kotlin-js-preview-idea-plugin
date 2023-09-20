@@ -13,26 +13,23 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.FileFilterUtils
 import org.jetbrains.kotlin.idea.util.application.runWriteAction
 import java.io.File
-import java.nio.file.NoSuchFileException
 
-class RecursiveProjectCopier: ProjectCopier {
+class SimpleProjectCopier: ProjectCopier {
     private val config: PluginConfig = PluginConfig.getInstance()
 
     override fun copy(project: Project) {
-        val tempDir = runWriteAction { createTempDir(project) }
         val projectDir = project.guessProjectDir().orException { NO_PROJECT_DIR }
+        val tempDir = runWriteAction { createTempDir(project) }
         runWriteAction { copyFilesRecursively(projectDir, tempDir) }
     }
 
     private fun copyFilesRecursively(source: VirtualFile, dist: VirtualFile) {
-        val sourceFile = File(source.path)
-        val distFile = File(dist.path)
         val dirFilter = FileFilterUtils.notFileFilter(
             FileFilterUtils.or(
                 *config.copyIgnoreFileNames.map { FileFilterUtils.nameFileFilter(it) }.toTypedArray()
             )
         )
-        FileUtils.copyDirectory(sourceFile, distFile, dirFilter)
+        FileUtils.copyDirectory(File(source.path), File(dist.path), dirFilter)
     }
 
     private fun createTempDir(project: Project): VirtualFile {
@@ -41,13 +38,8 @@ class RecursiveProjectCopier: ProjectCopier {
         val tempDirPath = "${projectBaseDir.path}/$BUILD_DIR/${config.tempProjectDirName}"
         val tempDir = LocalFileSystem.getInstance().refreshAndFindFileByPath(tempDirPath)
 
-        return tempDir?.let { file ->
-            if (file.exists()) {
-                tempDir
-            } else {
-                projectBaseDir.createChildDirectoryIfNotCreated(BUILD_DIR)
-                    .createChildDirectoryIfNotCreated(config.tempProjectDirName)
-            }
-        } ?: throw NoSuchFileException("Could not create temp directory with path [${tempDirPath}]")
+        return tempDir?.takeIf { it.exists() }
+            ?: projectBaseDir.createChildDirectoryIfNotCreated(BUILD_DIR)
+                .createChildDirectoryIfNotCreated(config.tempProjectDirName)
     }
 }

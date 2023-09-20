@@ -6,10 +6,10 @@ import com.intellij.psi.*
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.searches.AnnotatedElementsSearch
 import com.intellij.psi.search.searches.ReferencesSearch
-import com.sanyavertolet.kotlinjspreview.BUILD_DIR
+import com.sanyavertolet.kotlinjspreview.utils.BUILD_DIR
 import com.sanyavertolet.kotlinjspreview.config.PluginConfig
-import com.sanyavertolet.kotlinjspreview.getIdentifier
-import com.sanyavertolet.kotlinjspreview.getPathOrException
+import com.sanyavertolet.kotlinjspreview.utils.getIdentifier
+import com.sanyavertolet.kotlinjspreview.utils.getPathOrException
 import org.jetbrains.kotlin.idea.util.application.runWriteAction
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtValueArgumentList

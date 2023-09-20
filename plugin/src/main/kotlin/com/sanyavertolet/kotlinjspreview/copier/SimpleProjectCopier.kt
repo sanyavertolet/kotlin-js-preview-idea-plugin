@@ -4,11 +4,11 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
-import com.sanyavertolet.kotlinjspreview.BUILD_DIR
-import com.sanyavertolet.kotlinjspreview.NO_PROJECT_DIR
+import com.sanyavertolet.kotlinjspreview.utils.BUILD_DIR
+import com.sanyavertolet.kotlinjspreview.utils.NO_PROJECT_DIR
 import com.sanyavertolet.kotlinjspreview.config.PluginConfig
-import com.sanyavertolet.kotlinjspreview.createChildDirectoryIfNotCreated
-import com.sanyavertolet.kotlinjspreview.orException
+import com.sanyavertolet.kotlinjspreview.utils.createChildDirectoryIfNotCreated
+import com.sanyavertolet.kotlinjspreview.utils.orException
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.FileFilterUtils
 import org.jetbrains.kotlin.idea.util.application.runWriteAction

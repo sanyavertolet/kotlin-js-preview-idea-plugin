@@ -11,13 +11,12 @@ import com.sanyavertolet.kotlinjspreview.config.PluginConfig
 import com.sanyavertolet.kotlinjspreview.utils.getPathOrException
 import com.sanyavertolet.kotlinjspreview.task.JsPreviewNotifierCallback
 import org.jetbrains.kotlin.idea.configuration.GRADLE_SYSTEM_ID
-import org.jetbrains.kotlin.idea.util.application.runWriteAction
 import java.util.*
 
 class GradleBuilder : Builder {
     private val config: PluginConfig = PluginConfig.getInstance()
 
-    override fun build(project: Project) = runWriteAction { runBuildTaskForTempProject(project) }
+    override fun build(project: Project) = runBuildTaskForTempProject(project)
 
     private fun runBuildTaskForTempProject(project: Project) = ExternalSystemUtil.runTask(
         getBuildSettings(project),

@@ -7,7 +7,7 @@ import com.sanyavertolet.kotlinjspreview.utils.isValOfPropertyAnnotatedWith
 
 class JsPreviewRunLineMarkerContributor : RunLineMarkerContributor() {
     override fun getInfo(element: PsiElement): Info? = if (element.isValOfPropertyAnnotatedWith("JsPreview")) {
-        Info(AllIcons.Actions.Execute, { "Run preview" }, BuildKotlinJsAction(element))
+        Info(AllIcons.Actions.Execute, { "Run preview" }, BuildKotlinJsAction(element.parent))
     } else {
         null
     }

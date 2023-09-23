@@ -3,6 +3,7 @@ package com.sanyavertolet.kotlinjspreview.config
 import com.intellij.openapi.options.Configurable
 import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBScrollPane
+import com.intellij.ui.components.JBTextArea
 import java.awt.Dimension
 import java.awt.FlowLayout
 import javax.swing.*
@@ -82,7 +83,13 @@ class PluginConfigurable : Configurable {
             add(ignoreFileNamesPanel)
         }
 
+        val wipDisclaimerTextArea = JBTextArea().apply {
+            text = "Note that settings are still being developed. It might not work."
+            isEnabled = false
+        }
+
         settingsPanel?.apply {
+            add(wipDisclaimerTextArea)
             add(tempProjectDirNameLabeledPanel)
             add(ignoreFileNamesLabeledPanel)
         }

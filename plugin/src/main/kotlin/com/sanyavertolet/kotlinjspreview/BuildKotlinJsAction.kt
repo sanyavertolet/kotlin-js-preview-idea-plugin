@@ -28,6 +28,7 @@ class BuildKotlinJsAction(
 
         projectCopier.copy(project)
         substitutor.substitute(psiElement, project)
+        // fixme: by this moment, everything MUST be synced - file system should have main method substituted
         builder.build(project)
 
         openBrowserWindow(project)

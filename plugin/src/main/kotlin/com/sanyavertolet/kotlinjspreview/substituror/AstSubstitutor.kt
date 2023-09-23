@@ -1,5 +1,6 @@
 package com.sanyavertolet.kotlinjspreview.substituror
 
+import com.intellij.openapi.application.runUndoTransparentWriteAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.*
@@ -10,16 +11,13 @@ import com.sanyavertolet.kotlinjspreview.utils.BUILD_DIR
 import com.sanyavertolet.kotlinjspreview.config.PluginConfig
 import com.sanyavertolet.kotlinjspreview.utils.getIdentifier
 import com.sanyavertolet.kotlinjspreview.utils.getPathOrException
-import org.jetbrains.kotlin.idea.util.application.runWriteAction
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtValueArgumentList
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import java.io.File
 
 class AstSubstitutor: Substitutor {
-    override fun substitute(psiElement: PsiElement, project: Project) = runWriteAction {
-        replaceWrapper(psiElement, project)
-    }
+    override fun substitute(psiElement: PsiElement, project: Project) = replaceWrapper(psiElement, project)
 
     private fun findWrapper(project: Project): PsiMethod? {
         val javaPsiFacade = JavaPsiFacade.getInstance(project)
@@ -61,16 +59,12 @@ class AstSubstitutor: Substitutor {
             previewComponentIdentifierString,
         )
 
-        psiFile.findDescendantOfType<KtFunction> { it.name == "main" }
-            ?.findDescendantOfType<KtValueArgumentList>()
-            ?.firstChild
-            ?.nextSibling
-            ?.replace(newParameter)
-
-        val psiDocumentManager = PsiDocumentManager.getInstance(project)
-        val document = psiDocumentManager.getCachedDocument(psiFile)
-        if (document != null) {
-            psiDocumentManager.commitDocument(document)
+        runUndoTransparentWriteAction {
+            psiFile.findDescendantOfType<KtFunction> { it.name == "main" }
+                ?.findDescendantOfType<KtValueArgumentList>()
+                ?.firstChild
+                ?.nextSibling
+                ?.replace(newParameter)
         }
 
         return

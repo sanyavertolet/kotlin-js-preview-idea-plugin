@@ -5,9 +5,12 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.psi.PsiElement
+import com.sanyavertolet.kotlinjspreview.builder.Builder
 import com.sanyavertolet.kotlinjspreview.builder.GradleBuilder
-import com.sanyavertolet.kotlinjspreview.copier.SimpleProjectCopier
+import com.sanyavertolet.kotlinjspreview.copier.ProjectCopier
+import com.sanyavertolet.kotlinjspreview.copier.VfsProjectCopier
 import com.sanyavertolet.kotlinjspreview.substituror.AstSubstitutor
+import com.sanyavertolet.kotlinjspreview.substituror.Substitutor
 import org.jetbrains.kotlin.idea.util.application.runReadAction
 
 /**
@@ -18,9 +21,9 @@ import org.jetbrains.kotlin.idea.util.application.runReadAction
 class BuildKotlinJsAction(
     private val psiElement: PsiElement? = null,
 ) : AnAction() {
-    private val projectCopier = SimpleProjectCopier()
-    private val builder = GradleBuilder()
-    private val substitutor = AstSubstitutor()
+    private val projectCopier: ProjectCopier = VfsProjectCopier()
+    private val builder: Builder = GradleBuilder()
+    private val substitutor: Substitutor = AstSubstitutor()
 
     override fun actionPerformed(event: AnActionEvent) {
         psiElement ?: return
@@ -28,7 +31,6 @@ class BuildKotlinJsAction(
 
         projectCopier.copy(project)
         substitutor.substitute(psiElement, project)
-        // fixme: by this moment, everything MUST be synced - file system should have main method substituted
         builder.build(project)
 
         openBrowserWindow(project)

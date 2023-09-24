@@ -17,7 +17,7 @@ class VfsProjectCopier: ProjectCopier {
         val projectDir = project.guessProjectDir().orException { NO_PROJECT_DIR }
         val tempDir = createTempDir(project).orException()
         VfsUtil.copyDirectory(this, projectDir, tempDir) {
-            config.copyIgnoreFileNames.contains(it.name)
+            !config.copyIgnoreFileNames.contains(it.name)
         }
     }
 

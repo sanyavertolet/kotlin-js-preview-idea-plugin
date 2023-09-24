@@ -21,18 +21,27 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable instance="com.sanyavertolet.kotlinjspreview.config.PluginConfigurable"
-                                 displayName="Kotlin JS Preview Settings"
+        <applicationConfigurable
+                instance="com.sanyavertolet.kotlinjspreview.config.PluginConfigurable"
+                id="com.sanyavertolet.kotlinjspreview.config.PluginConfigurable"
+                parentId="tools"
+                displayName="Kotlin JS Preview"
         />
 
-        <runLineMarkerContributor language="kotlin"
+        <runLineMarkerContributor
+                language="kotlin"
                 implementationClass="com.sanyavertolet.kotlinjspreview.JsPreviewRunLineMarkerContributor"
         />
-        <notificationGroup id="js-preview-notification"
-                           displayType="BALLOON"/>
-        <toolWindow factoryClass="com.sanyavertolet.kotlinjspreview.PreviewToolWindowFactory"
-                    id="KotlinJsPreview"
-                    anchor="right"
+
+        <notificationGroup
+                id="js-preview-notification"
+                displayType="BALLOON"
+        />
+
+        <toolWindow
+                factoryClass="com.sanyavertolet.kotlinjspreview.PreviewToolWindowFactory"
+                id="KotlinJsPreview"
+                anchor="right"
         />
     </extensions>
 </idea-plugin>

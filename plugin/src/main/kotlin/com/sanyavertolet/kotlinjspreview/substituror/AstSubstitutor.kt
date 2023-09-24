@@ -59,6 +59,8 @@ class AstSubstitutor: Substitutor {
             previewComponentIdentifierString,
         )
 
+        PsiDocumentManager.getInstance(project).commitAllDocuments()
+
         runUndoTransparentWriteAction {
             psiFile.findDescendantOfType<KtFunction> { it.name == "main" }
                 ?.findDescendantOfType<KtValueArgumentList>()

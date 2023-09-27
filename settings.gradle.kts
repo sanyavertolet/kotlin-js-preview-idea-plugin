@@ -1,4 +1,4 @@
-rootProject.name = "kotlin-js-preview"
+rootProject.name = "kotlin-js-preview-idea-plugin"
 
 pluginManagement {
     repositories {
@@ -7,14 +7,11 @@ pluginManagement {
     }
 }
 
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositories {
-        mavenCentral()
-    }
+plugins {
+    id("org.jetbrains.kotlin.jvm") version "1.9.0" apply false
+    id("org.jetbrains.kotlin.multiplatform") version "1.9.0" apply false
 }
 
-
+includeBuild("gradle/plugins")
 include("plugin")
 include("core")

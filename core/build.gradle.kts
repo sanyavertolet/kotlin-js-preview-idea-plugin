@@ -1,9 +1,11 @@
+import com.sanyavertolet.kotlinjspreview.buildutils.configureSigning
+
 plugins {
-    id("org.jetbrains.kotlin.multiplatform") version "1.9.0"
+    alias(libs.plugins.kotlin.multiplatform)
+    id("com.sanyavertolet.kotlinjspreview.buildutils.publishing-configuration")
 }
 
-group = "com.sanyavertolet"
-version = "1.0-SNAPSHOT"
+group = "com.sanyavertolet.kotlinjspreview"
 
 repositories {
     mavenCentral()
@@ -12,26 +14,12 @@ repositories {
 kotlin {
     js(IR) {
         moduleName = "jsPreview"
-        browser {
-            binaries.executable()
-            @Suppress("DEPRECATION")
-            commonWebpackConfig {
-                cssSupport {
-                    enabled.set(true)
-                }
-            }
-        }
+        browser()
     }
 
     sourceSets {
-        val jsMain by getting {
-            dependencies {
-                implementation(enforcedPlatform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.598"))
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom")
-            }
-        }
+        val jsMain by getting
     }
 }
+
+configureSigning()

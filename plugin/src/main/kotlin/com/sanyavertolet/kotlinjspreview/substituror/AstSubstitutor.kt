@@ -4,36 +4,35 @@ import com.intellij.openapi.application.runUndoTransparentWriteAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.*
-import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.search.searches.AnnotatedElementsSearch
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.sanyavertolet.kotlinjspreview.utils.BUILD_DIR
 import com.sanyavertolet.kotlinjspreview.config.PluginConfig
 import com.sanyavertolet.kotlinjspreview.utils.getIdentifier
 import com.sanyavertolet.kotlinjspreview.utils.getPathOrException
+import org.jetbrains.kotlin.idea.base.util.module
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtValueArgumentList
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import java.io.File
+import com.intellij.openapi.module.Module
+import org.jetbrains.kotlin.idea.stubindex.KotlinAnnotationsIndex
+import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class AstSubstitutor: Substitutor {
     override fun substitute(psiElement: PsiElement, project: Project) = replaceWrapper(psiElement, project)
 
-    private fun findWrapper(project: Project): PsiMethod? {
-        val javaPsiFacade = JavaPsiFacade.getInstance(project)
-        val annotationClass = javaPsiFacade.findClass(
-            "com.sanyavertolet.kotlinjspreview.RootWrapper",
-            GlobalSearchScope.allScope(project),
-        ) ?: return null
+    private fun findWrapper(module: Module, project: Project): KtNamedFunction? = KotlinAnnotationsIndex.get(
+            "RootWrapper",
+            project,
+            module.moduleWithLibrariesScope,
+        )
+            .first()
+            .context
+            ?.parent
+            ?.takeIf { it is KtNamedFunction } as KtNamedFunction?
 
-        return AnnotatedElementsSearch.searchPsiMethods(
-            annotationClass,
-            GlobalSearchScope.allScope(project),
-        ).findFirst()
-    }
-
-    private fun findWrapperUsage(project: Project): PsiReference? {
-        val wrapper = findWrapper(project) ?: return null
+    private fun findWrapperUsage(module: Module, project: Project): PsiReference? {
+        val wrapper = findWrapper(module, project) ?: return null
         val usages = ReferencesSearch.search(wrapper)
         return usages.findFirst()
     }
@@ -46,7 +45,8 @@ class AstSubstitutor: Substitutor {
     }
 
     private fun replaceWrapper(psiElement: PsiElement, project: Project) {
-        val usage = findWrapperUsage(project)?.element ?: return
+        val module = psiElement.module ?: return
+        val usage = findWrapperUsage(module, project)?.element ?: return
 
         val pathToTempFile = getPathToFileInTempProject(usage, project)
 

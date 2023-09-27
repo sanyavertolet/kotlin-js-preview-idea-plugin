@@ -2,7 +2,7 @@
   <artifact type="jar" name="core-js-1.0-SNAPSHOT">
     <output-path>$PROJECT_DIR$/core/build/libs</output-path>
     <root id="archive" name="core-js-1.0-SNAPSHOT.jar">
-      <element id="module-output" name="kotlin-js-preview.core.jsMain" />
+      <element id="module-output" name="kotlin-js-preview-idea-plugin.core.jsMain" />
     </root>
   </artifact>
 </component>

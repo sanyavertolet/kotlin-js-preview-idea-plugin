@@ -1,11 +1,13 @@
+import com.sanyavertolet.kotlinjspreview.buildutils.configureSigning
+
 plugins {
+    alias(libs.plugins.intellij)
+    alias(libs.plugins.kotlin.jvm)
     id("java")
-    id("org.jetbrains.kotlin.jvm")
-    id("org.jetbrains.intellij")
+    id("com.sanyavertolet.kotlinjspreview.buildutils.code-quality-convention")
 }
 
 group = "com.sanyavertolet"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -45,3 +47,5 @@ tasks {
         token.set(System.getenv("PUBLISH_TOKEN"))
     }
 }
+
+configureSigning()

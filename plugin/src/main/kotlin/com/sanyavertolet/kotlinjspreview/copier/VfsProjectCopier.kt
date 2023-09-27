@@ -1,5 +1,6 @@
 package com.sanyavertolet.kotlinjspreview.copier
 
+import com.intellij.openapi.application.runUndoTransparentWriteAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.vfs.LocalFileSystem
@@ -16,8 +17,10 @@ class VfsProjectCopier: ProjectCopier {
     override fun copy(project: Project) {
         val projectDir = project.guessProjectDir().orException { NO_PROJECT_DIR }
         val tempDir = createTempDir(project).orException()
-        VfsUtil.copyDirectory(this, projectDir, tempDir) {
-            !config.copyIgnoreFileNames.contains(it.name)
+        runUndoTransparentWriteAction {
+            VfsUtil.copyDirectory(this, projectDir, tempDir) {
+                !config.copyIgnoreFileNames.contains(it.name)
+            }
         }
     }
 
@@ -25,6 +28,6 @@ class VfsProjectCopier: ProjectCopier {
         val projectBaseDir = project.guessProjectDir().orException { NO_PROJECT_DIR }
         val tempDirPath = "${projectBaseDir.path}/$BUILD_DIR/${config.tempProjectDirName}"
         val tempDir = localFileSystem.refreshAndFindFileByPath(tempDirPath)
-        return tempDir?.takeIf { it.exists() } ?: VfsUtil.createDirectoryIfMissing(tempDirPath)
+        return tempDir?.takeIf { it.exists() } ?: runUndoTransparentWriteAction { VfsUtil.createDirectoryIfMissing(tempDirPath) }
     }
 }

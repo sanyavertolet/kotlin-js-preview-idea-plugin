@@ -1,4 +1,5 @@
 import com.sanyavertolet.kotlinjspreview.buildutils.configureSigning
+import com.sanyavertolet.kotlinjspreview.buildutils.readFromPropertyOrEnv
 
 plugins {
     alias(libs.plugins.intellij)
@@ -33,18 +34,22 @@ tasks {
     }
 
     patchPluginXml {
+
         sinceBuild.set("223")
         untilBuild.set("232.*")
+        version.set(project.version.toString())
     }
 
+    val jetbrainsMarketplaceToken = findProperty("jb.token") as String? ?: System.getenv("JB_TOKEN")
+
     signPlugin {
-        certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
-        privateKey.set(System.getenv("PRIVATE_KEY"))
-        password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
+        certificateChain.set(readFromPropertyOrEnv("jb.chain", "CERTIFICATE_CHAIN"))
+        privateKey.set(readFromPropertyOrEnv("jb.private", "PRIVATE_KEY"))
+        password.set(readFromPropertyOrEnv("jb.password", "PRIVATE_KEY_PASSWORD"))
     }
 
     publishPlugin {
-        token.set(System.getenv("PUBLISH_TOKEN"))
+        token.set(jetbrainsMarketplaceToken)
     }
 }
 

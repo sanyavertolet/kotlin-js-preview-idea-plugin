@@ -5,7 +5,6 @@
     <description>An attempt to provide Kotlin/JS previews</description>
     <change-notes>Initial release of the plugin.</change-notes>
     <vendor email="lxnfrolov@gmail.com" url="https://www.github.com/sanyavertolet">sanyavertolet</vendor>
-    <version>0.1.0</version>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>org.jetbrains.kotlin</depends>

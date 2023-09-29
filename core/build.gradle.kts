@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
     id("com.sanyavertolet.kotlinjspreview.buildutils.publishing-configuration")
     id("com.sanyavertolet.kotlinjspreview.buildutils.code-quality-convention")
+    signing
+    `maven-publish`
 }
 
 group = "com.sanyavertolet.kotlinjspreview"

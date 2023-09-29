@@ -1,9 +1,20 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
-<idea-plugin>
+<idea-plugin url="https://www.github.com/sanyavertolet">
     <id>com.sanyavertolet.kotlinjspreview</id>
     <name>Kotlin Js Preview</name>
-    <description>An attempt to provide Kotlin/JS previews</description>
-    <change-notes>Initial release of the plugin.</change-notes>
+    <description>
+        Kotlin JS Preview is an IntelliJ IDEA plugin that offers a mechanism to preview Kotlin/JS React functional components.
+
+        Features:
+         * Live Preview: Display a live preview of the Kotlin/JS React functional component as it's being developed.
+         * Theme Toggle: Switch between different themes or styles seamlessly to see how the component appears under various themes.
+         * No Source Code Corruption: Ensures that your source code remains unaltered.
+         * Settings: Configure the plugin by navigating to Settings -> Tools -> Kotlin JS Preview.
+    </description>
+    <change-notes>
+        * Added a simple preview window
+        * Added @JsPreview annotation support
+    </change-notes>
     <vendor email="lxnfrolov@gmail.com" url="https://www.github.com/sanyavertolet">sanyavertolet</vendor>
 
     <depends>com.intellij.modules.java</depends>

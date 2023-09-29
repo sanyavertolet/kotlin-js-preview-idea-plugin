@@ -9,7 +9,7 @@ fun PsiElement.isTopLevelPropertyAnnotatedWith(annotationShortName: String): Boo
     return this is KtProperty && isTopLevel && isAnnotatedWith(annotationShortName)
 }
 
-fun KtProperty.isAnnotatedWith(annotationShortName: String) = annotationEntries.find { it.shortName?.asString() == annotationShortName } != null
+fun KtProperty.isAnnotatedWith(annotationShortName: String) = annotationEntries.any { it.shortName?.asString() == annotationShortName }
 
 fun PsiElement.isParentTopLevelPropertyAnnotatedWith(
     annotationShortName: String,

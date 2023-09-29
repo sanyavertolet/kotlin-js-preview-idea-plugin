@@ -9,8 +9,8 @@ on:
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=true -Dorg.gradle.parallel=true -Dorg.gradle.welcome=never
-  GPG_SEC: ${{ secrets.PGP_SEC }}
-  GPG_PASSWORD: ${{ secrets.PGP_PASSWORD }}
+  GPG_SEC: ${{ secrets.PRIVATE_KEY }}
+  GPG_PASSWORD: ${{ secrets.PRIVATE_KEY_PASSWORD }}
 
 jobs:
   build:

@@ -8,7 +8,7 @@ plugins {
     id("com.sanyavertolet.kotlinjspreview.buildutils.code-quality-convention")
 }
 
-group = "com.sanyavertolet"
+group = "com.sanyavertolet.kotlinjspreview"
 
 repositories {
     mavenCentral()

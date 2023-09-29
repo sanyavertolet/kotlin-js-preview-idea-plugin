@@ -11,7 +11,6 @@ import com.sanyavertolet.kotlinjspreview.copier.ProjectCopier
 import com.sanyavertolet.kotlinjspreview.copier.VfsProjectCopier
 import com.sanyavertolet.kotlinjspreview.substituror.AstSubstitutor
 import com.sanyavertolet.kotlinjspreview.substituror.Substitutor
-import org.jetbrains.kotlin.idea.util.application.runReadAction
 
 /**
  * @JsPreview
@@ -38,6 +37,6 @@ class BuildKotlinJsAction(
 
     private fun openBrowserWindow(project: Project) {
         val toolWindow = ToolWindowManager.getInstance(project).getToolWindow(PreviewToolWindowFactory.ID)
-        runReadAction { toolWindow?.activate(null) }
+        toolWindow?.activate(null)
     }
 }

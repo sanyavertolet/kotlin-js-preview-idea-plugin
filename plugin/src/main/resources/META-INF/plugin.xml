@@ -6,6 +6,7 @@
     <change-notes>Initial release of the plugin.</change-notes>
     <vendor email="lxnfrolov@gmail.com" url="https://www.github.com/sanyavertolet">sanyavertolet</vendor>
 
+    <depends>com.intellij.modules.java</depends>
     <depends>com.intellij.modules.platform</depends>
     <depends>org.jetbrains.kotlin</depends>
 

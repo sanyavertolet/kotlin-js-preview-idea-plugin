@@ -3,10 +3,24 @@ package com.sanyavertolet.kotlinjspreview.config
 import com.intellij.openapi.options.Configurable
 import com.intellij.ui.JBColor
 import com.intellij.ui.TitledSeparator
-import com.intellij.ui.components.*
+import com.intellij.ui.components.JBList
+import com.intellij.ui.components.JBScrollPane
+import com.intellij.ui.components.JBTextField
+import com.intellij.ui.components.JBTextArea
 import com.intellij.util.ui.JBUI
-import java.awt.*
-import javax.swing.*
+import java.awt.GridBagLayout
+import java.awt.GridBagConstraints
+import java.awt.FlowLayout
+import javax.swing.JPanel
+import javax.swing.JTextField
+import javax.swing.DefaultListModel
+import javax.swing.JList
+import javax.swing.JComponent
+import javax.swing.Box
+import javax.swing.JButton
+import javax.swing.ListSelectionModel
+import javax.swing.JLabel
+import javax.swing.UIManager
 
 class PluginConfigurable : Configurable, Configurable.Beta {
     private var settingsPanel: JPanel? = null
@@ -15,6 +29,7 @@ class PluginConfigurable : Configurable, Configurable.Beta {
     private var copyIgnoreFileNamesList: JList<String>? = null
     private var fileNameInputField: JTextField? = null
 
+    @Suppress("MagicNumber")
     override fun createComponent(): JComponent? {
         settingsPanel = JPanel(GridBagLayout())
 
@@ -30,12 +45,12 @@ class PluginConfigurable : Configurable, Configurable.Beta {
 
         val generalSettingsSection = getGeneralSettingsSection()
         gbc.gridy = 1
-        gbc.insets = JBUI.insetsTop(10)
+        gbc.insets = JBUI.insetsTop(INSETS_TOP)
         settingsPanel?.add(generalSettingsSection, gbc)
 
         val ignoreFileNamesPanel = getCopyIgnoreFileNamesListSection()
         gbc.gridy = 2
-        gbc.insets = JBUI.insetsTop(10)
+        gbc.insets = JBUI.insetsTop(INSETS_TOP)
         settingsPanel?.add(ignoreFileNamesPanel, gbc)
 
         gbc.gridy = 3
@@ -73,10 +88,12 @@ class PluginConfigurable : Configurable, Configurable.Beta {
             addAll(PluginConfig.getInstance().copyIgnoreFileNames)
         }
 
-        copyIgnoreFileNamesList = JBList(*PluginConfig.getInstance().copyIgnoreFileNames.toTypedArray()).apply {
+        copyIgnoreFileNamesList = JBList(
+            *PluginConfig.getInstance().copyIgnoreFileNames.toTypedArray()
+        ).apply {
             selectionMode = ListSelectionModel.SINGLE_SELECTION
             layoutOrientation = JList.VERTICAL
-            visibleRowCount = 7
+            visibleRowCount = VISIBLE_ROW_COUNT
             model = copyIgnoreFileNamesListModel
             addListSelectionListener { event ->
                 if (!event.valueIsAdjusting) {
@@ -85,7 +102,7 @@ class PluginConfigurable : Configurable, Configurable.Beta {
             }
         }
 
-        fileNameInputField = JTextField(20).apply {
+        fileNameInputField = JTextField(COLUMNS).apply {
             toolTipText = "Enter the name of the file or directory to ignore during copy."
             addActionListener { fileNameAddButton.isEnabled = text.isNotBlank() }
         }
@@ -97,7 +114,7 @@ class PluginConfigurable : Configurable, Configurable.Beta {
         }
 
         return JPanel(GridBagLayout()).apply {
-            border = JBUI.Borders.empty(5, 0)
+            border = JBUI.Borders.empty(TOP_AND_BOTTOM_BORDERS, LEFT_AND_RIGHT_BORDERS)
 
             val gbc = GridBagConstraints()
             gbc.fill = GridBagConstraints.HORIZONTAL
@@ -118,18 +135,18 @@ class PluginConfigurable : Configurable, Configurable.Beta {
     }
 
     private fun getGeneralSettingsSection(): JComponent {
-        tempProjectDirNameField = JBTextField(PluginConfig.getInstance().tempProjectDirName, 20).apply {
+        tempProjectDirNameField = JBTextField(PluginConfig.getInstance().tempProjectDirName, COLUMNS).apply {
             toolTipText = "Name of the temporary directory to be used by the plugin."
         }
 
         val tempProjectDirNameLabeledField = JPanel(FlowLayout(FlowLayout.LEADING)).apply {
-            border = JBUI.Borders.empty(5, 0)
+            border = JBUI.Borders.empty(TOP_AND_BOTTOM_BORDERS, LEFT_AND_RIGHT_BORDERS)
             add(JLabel("Temp Project Directory Name:"))
             add(tempProjectDirNameField)
         }
 
         return JPanel(GridBagLayout()).apply {
-            border = JBUI.Borders.empty(5, 0)
+            border = JBUI.Borders.empty(TOP_AND_BOTTOM_BORDERS, LEFT_AND_RIGHT_BORDERS)
 
             val gbc = GridBagConstraints()
             gbc.fill = GridBagConstraints.HORIZONTAL
@@ -145,7 +162,7 @@ class PluginConfigurable : Configurable, Configurable.Beta {
         }
     }
 
-    private fun getDisclaimerSection(): JComponent = JBTextArea(1, 40).apply {
+    private fun getDisclaimerSection(): JComponent = JBTextArea(1, 2 * COLUMNS).apply {
         text = "Note: Settings are still being developed. Functionality might not work as expected."
         wrapStyleWord = true
         lineWrap = true
@@ -181,4 +198,11 @@ class PluginConfigurable : Configurable, Configurable.Beta {
     }
 
     override fun getDisplayName(): String = "Kotlin JS Preview"
+    companion object {
+        private const val TOP_AND_BOTTOM_BORDERS = 5
+        private const val LEFT_AND_RIGHT_BORDERS = 0
+        private const val INSETS_TOP = 10
+        private const val COLUMNS = 20
+        private const val VISIBLE_ROW_COUNT = 7
+    }
 }

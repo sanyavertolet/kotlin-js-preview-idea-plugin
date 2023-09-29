@@ -52,13 +52,13 @@ class PreviewToolWindowFactory : ToolWindowFactory {
         val zoomOutButton = JButton("-").apply {
             addActionListener {
                 val currentZoom = cefBrowser.zoomLevel
-                cefBrowser.zoomLevel = currentZoom - 0.5 // Adjust this value as necessary
+                cefBrowser.zoomLevel = currentZoom - ZOOM_VALUE
             }
         }
         val zoomInButton = JButton("+").apply {
             addActionListener {
                 val currentZoom = cefBrowser.zoomLevel
-                cefBrowser.zoomLevel = currentZoom + 0.5
+                cefBrowser.zoomLevel = currentZoom + ZOOM_VALUE
             }
         }
         add(hideButton)
@@ -68,5 +68,6 @@ class PreviewToolWindowFactory : ToolWindowFactory {
 
     companion object {
         const val ID = "KotlinJsPreview"
+        private const val ZOOM_VALUE = 0.5
     }
 }

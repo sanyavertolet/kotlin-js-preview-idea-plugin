@@ -4,7 +4,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.vfs.VirtualFile
 
-fun VirtualFile?.orException(messageBuilder: () -> String = { "" }) = this ?: throw IllegalStateException(messageBuilder())
+fun VirtualFile?.orException(messageBuilder: () -> String = { "" }) = this ?: error(messageBuilder())
 
 fun Project.getPathOrException(
     exceptionMessageBuilder: () -> String = { "" }

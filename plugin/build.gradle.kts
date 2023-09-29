@@ -51,5 +51,3 @@ tasks {
         token.set(jetbrainsMarketplaceToken)
     }
 }
-
-configureSigning()

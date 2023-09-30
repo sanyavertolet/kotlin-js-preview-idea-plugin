@@ -25,4 +25,8 @@ kotlin {
     }
 }
 
+tasks.withType<AbstractPublishToMaven> {
+    dependsOn(tasks.withType<Sign>())
+}
+
 configureSigning()

@@ -9,8 +9,6 @@ plugins {
 }
 
 run {
-    System.getenv("GPG_SEC")?.let { extra.set("signingKey", it) }
-    System.getenv("GPG_PASSWORD")?.let { extra.set("signingPassword", it) }
     configureGitHubPublishing()
     configurePublications()
 }

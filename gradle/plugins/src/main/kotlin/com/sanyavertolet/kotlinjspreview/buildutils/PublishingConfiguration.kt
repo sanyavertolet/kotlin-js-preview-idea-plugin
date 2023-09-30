@@ -30,7 +30,6 @@ import org.gradle.plugins.signing.SigningExtension
 fun Project.configureSigning() {
     System.getenv("GPG_SEC")?.let { extra.set("signingKey", it) }
     System.getenv("GPG_PASSWORD")?.let { extra.set("signingPassword", it) }
-
     if (hasProperty("signingKey")) {
         /*
          * GitHub Actions.

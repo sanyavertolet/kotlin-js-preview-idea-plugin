@@ -5,6 +5,9 @@ import com.intellij.notification.NotificationType
 import com.intellij.openapi.externalSystem.task.TaskCallback
 import com.intellij.openapi.project.Project
 
+/**
+ * [TaskCallback] that triggers build-related notifications
+ */
 class JsPreviewNotifierCallback(private val project: Project?) : TaskCallback {
     override fun onSuccess() {
         NotificationGroupManager.getInstance()

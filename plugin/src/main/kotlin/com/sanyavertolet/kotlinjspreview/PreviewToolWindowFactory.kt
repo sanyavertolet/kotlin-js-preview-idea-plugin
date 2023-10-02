@@ -14,7 +14,9 @@ import java.awt.event.ActionEvent
 import javax.swing.JButton
 import javax.swing.JPanel
 
-
+/**
+ * [ToolWindowFactory] that builds a tool window with JS preview
+ */
 class PreviewToolWindowFactory : ToolWindowFactory {
     private val config: PluginConfig = PluginConfig.getInstance()
 
@@ -67,6 +69,9 @@ class PreviewToolWindowFactory : ToolWindowFactory {
     }
 
     companion object {
+        /**
+         * ID of a tool window
+         */
         const val ID = "KotlinJsPreview"
         private const val ZOOM_VALUE = 0.5
     }

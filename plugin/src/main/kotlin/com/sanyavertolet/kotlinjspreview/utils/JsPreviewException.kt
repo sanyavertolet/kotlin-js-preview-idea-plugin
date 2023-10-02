@@ -1,3 +1,6 @@
 package com.sanyavertolet.kotlinjspreview.utils
 
-class JsPreviewException(message: String = ""): Exception(message)
+/**
+ * [Exception] connected with JS Preview plugin
+ */
+class JsPreviewException(message: String = "") : Exception(message)

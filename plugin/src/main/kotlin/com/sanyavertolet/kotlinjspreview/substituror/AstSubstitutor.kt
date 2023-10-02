@@ -1,47 +1,49 @@
 package com.sanyavertolet.kotlinjspreview.substituror
 
 import com.intellij.openapi.application.runUndoTransparentWriteAction
+import com.intellij.openapi.module.Module
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
-
+import com.intellij.psi.JavaPsiFacade
+import com.intellij.psi.PsiDocumentManager
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiManager
+import com.intellij.psi.PsiReference
 import com.intellij.psi.search.searches.ReferencesSearch
-import com.sanyavertolet.kotlinjspreview.utils.BUILD_DIR
 import com.sanyavertolet.kotlinjspreview.config.PluginConfig
+import com.sanyavertolet.kotlinjspreview.utils.BUILD_DIR
+import com.sanyavertolet.kotlinjspreview.utils.JsPreviewException
 import com.sanyavertolet.kotlinjspreview.utils.getIdentifier
 import com.sanyavertolet.kotlinjspreview.utils.getPathOrException
 import org.jetbrains.kotlin.idea.base.util.module
+import org.jetbrains.kotlin.idea.stubindex.KotlinAnnotationsIndex
 import org.jetbrains.kotlin.psi.KtFunction
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtValueArgumentList
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import java.io.File
-import com.intellij.openapi.module.Module
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiReference
-import com.intellij.psi.PsiManager
-import com.intellij.psi.JavaPsiFacade
-import com.intellij.psi.PsiDocumentManager
-import com.sanyavertolet.kotlinjspreview.utils.JsPreviewException
-import org.jetbrains.kotlin.idea.stubindex.KotlinAnnotationsIndex
-import org.jetbrains.kotlin.psi.KtNamedFunction
 import java.nio.file.NoSuchFileException
 
-class AstSubstitutor: Substitutor {
+/**
+ * [Substitutor] implementation that is based on abstract syntax tree modifications
+ */
+class AstSubstitutor : Substitutor {
     private val fileSystem = LocalFileSystem.getInstance()
     override fun substitute(psiElement: PsiElement, project: Project) = replaceWrapper(psiElement, project)
 
     private fun findWrapper(module: Module, project: Project): KtNamedFunction? = KotlinAnnotationsIndex.get(
-            "RootWrapper",
-            project,
-            module.moduleWithLibrariesScope,
-        )
-            .first()
-            .context
-            ?.parent
-            ?.takeIf { it is KtNamedFunction } as KtNamedFunction?
+        "RootWrapper",
+        project,
+        module.moduleWithLibrariesScope,
+    )
+        .first()
+        .context
+        ?.parent
+        ?.takeIf { it is KtNamedFunction } as KtNamedFunction?
 
     private fun findWrapperUsage(module: Module, project: Project): PsiReference? {
         val wrapper = findWrapper(module, project) ?: throw JsPreviewException(
-            "Could not find wrapper. Make sure it is annotated with @com.sanyavertolet.kotlinjspreview.RootWrapper annotation."
+            "Could not find wrapper. Make sure it is annotated with @com.sanyavertolet.kotlinjspreview.RootWrapper annotation.",
         )
         val usages = ReferencesSearch.search(wrapper)
         return usages.findFirst()
@@ -57,7 +59,7 @@ class AstSubstitutor: Substitutor {
     private fun replaceWrapper(psiElement: PsiElement, project: Project) {
         val module = psiElement.module ?: error("Could not get module of psiElement [$psiElement]")
         val usage = findWrapperUsage(module, project)?.element ?: throw JsPreviewException(
-            "Could not find wrapper usages. Make sure it is annotated with @com.sanyavertolet.kotlinjspreview.RootWrapper annotation."
+            "Could not find wrapper usages. Make sure it is annotated with @com.sanyavertolet.kotlinjspreview.RootWrapper annotation.",
         )
 
         val pathToTempFile = getPathToFileInTempProject(usage, project)

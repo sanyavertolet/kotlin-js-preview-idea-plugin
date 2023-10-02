@@ -11,7 +11,10 @@ import com.sanyavertolet.kotlinjspreview.utils.BUILD_DIR
 import com.sanyavertolet.kotlinjspreview.utils.NO_PROJECT_DIR
 import com.sanyavertolet.kotlinjspreview.utils.orException
 
-class VfsProjectCopier: ProjectCopier {
+/**
+ * [ProjectCopier] implementation that uses [VfsUtil] under the hood
+ */
+class VfsProjectCopier : ProjectCopier {
     private val config: PluginConfig = PluginConfig.getInstance()
     private val localFileSystem = LocalFileSystem.getInstance()
     override fun copy(project: Project) {

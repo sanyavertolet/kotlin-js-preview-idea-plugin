@@ -5,23 +5,26 @@ import com.intellij.ui.JBColor
 import com.intellij.ui.TitledSeparator
 import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBScrollPane
-import com.intellij.ui.components.JBTextField
 import com.intellij.ui.components.JBTextArea
+import com.intellij.ui.components.JBTextField
 import com.intellij.util.ui.JBUI
-import java.awt.GridBagLayout
-import java.awt.GridBagConstraints
 import java.awt.FlowLayout
+import java.awt.GridBagConstraints
+import java.awt.GridBagLayout
+import javax.swing.Box
+import javax.swing.DefaultListModel
+import javax.swing.JButton
+import javax.swing.JComponent
+import javax.swing.JLabel
+import javax.swing.JList
 import javax.swing.JPanel
 import javax.swing.JTextField
-import javax.swing.DefaultListModel
-import javax.swing.JList
-import javax.swing.JComponent
-import javax.swing.Box
-import javax.swing.JButton
 import javax.swing.ListSelectionModel
-import javax.swing.JLabel
 import javax.swing.UIManager
 
+/**
+ * Class responsible for settings panel render
+ */
 class PluginConfigurable : Configurable, Configurable.Beta {
     private var settingsPanel: JPanel? = null
     private var tempProjectDirNameField: JTextField? = null
@@ -89,7 +92,7 @@ class PluginConfigurable : Configurable, Configurable.Beta {
         }
 
         copyIgnoreFileNamesList = JBList(
-            *PluginConfig.getInstance().copyIgnoreFileNames.toTypedArray()
+            *PluginConfig.getInstance().copyIgnoreFileNames.toTypedArray(),
         ).apply {
             selectionMode = ListSelectionModel.SINGLE_SELECTION
             layoutOrientation = JList.VERTICAL
@@ -198,6 +201,7 @@ class PluginConfigurable : Configurable, Configurable.Beta {
     }
 
     override fun getDisplayName(): String = "Kotlin JS Preview"
+
     companion object {
         private const val TOP_AND_BOTTOM_BORDERS = 5
         private const val LEFT_AND_RIGHT_BORDERS = 0

@@ -5,17 +5,25 @@ import com.intellij.openapi.externalSystem.model.execution.ExternalSystemTaskExe
 import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode
 import com.intellij.openapi.externalSystem.util.ExternalSystemUtil
 import com.intellij.openapi.project.Project
+import com.sanyavertolet.kotlinjspreview.config.PluginConfig
+import com.sanyavertolet.kotlinjspreview.task.JsPreviewNotifierCallback
 import com.sanyavertolet.kotlinjspreview.utils.BUILD_DIR
 import com.sanyavertolet.kotlinjspreview.utils.NO_PROJECT_DIR
-import com.sanyavertolet.kotlinjspreview.config.PluginConfig
 import com.sanyavertolet.kotlinjspreview.utils.getPathOrException
-import com.sanyavertolet.kotlinjspreview.task.JsPreviewNotifierCallback
 import org.jetbrains.kotlin.idea.configuration.GRADLE_SYSTEM_ID
 import java.util.*
 
+/**
+ * [Builder] implementation that uses Gradle as build system
+ */
 class GradleBuilder : Builder {
     private val config: PluginConfig = PluginConfig.getInstance()
 
+    /**
+     * Build project with Gradle build system
+     *
+     * @param project a [Project] to build
+     */
     override fun build(project: Project) = runBuildTaskForTempProject(project)
 
     private fun runBuildTaskForTempProject(project: Project) = ExternalSystemUtil.runTask(
@@ -39,6 +47,9 @@ class GradleBuilder : Builder {
         }
 
     companion object {
+        /**
+         * Gradle task name that should be used to build a project
+         */
         private const val BUILD_COMMAND_TASK_NAME = "jsBrowserDistribution"
     }
 }

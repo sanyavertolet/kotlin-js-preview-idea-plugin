@@ -13,10 +13,12 @@ import com.sanyavertolet.kotlinjspreview.substituror.AstSubstitutor
 import com.sanyavertolet.kotlinjspreview.substituror.Substitutor
 
 /**
- * @JsPreview
- * val Welcome = FC { }
+ * Main action of a plugin. It simply does:
+ *  1. Copying
+ *  2. Substituting
+ *  3. Building
+ *  4. Opening browser tool window
  */
-
 class BuildKotlinJsAction(
     private val psiElement: PsiElement? = null,
 ) : AnAction() {
@@ -29,6 +31,7 @@ class BuildKotlinJsAction(
         val project = getEventProject(event) ?: return
 
         projectCopier.copy(project)
+
         substitutor.substitute(psiElement, project)
         builder.build(project)
 

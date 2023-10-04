@@ -1,6 +1,10 @@
 package com.sanyavertolet.kotlinjspreview.inspection
 
-import com.intellij.codeInspection.*
+import com.intellij.codeInspection.InspectionManager
+import com.intellij.codeInspection.LocalInspectionTool
+import com.intellij.codeInspection.ProblemDescriptor
+import com.intellij.codeInspection.ProblemHighlightType
+import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.nj2k.types.typeFqName
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -11,6 +15,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * has a `react.FC` as the first argument
  */
 class RootWrapperFirstArgumentInspection : LocalInspectionTool() {
+    @Suppress("UnsafeCallOnNullableType")
     override fun checkFile(
         file: PsiFile,
         manager: InspectionManager,

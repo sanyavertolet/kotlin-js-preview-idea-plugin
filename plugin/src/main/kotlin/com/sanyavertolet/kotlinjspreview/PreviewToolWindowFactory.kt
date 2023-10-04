@@ -19,16 +19,16 @@ import javax.swing.JPanel
  */
 class PreviewToolWindowFactory : ToolWindowFactory {
     private val config: PluginConfig = PluginConfig.getInstance()
+    private val contentFactory = ContentFactory.getInstance()
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
-        val content = ContentFactory.getInstance()
-            .createContent(getPanelContent(project, toolWindow), "", false)
+        val content = contentFactory.createContent(getPanelContent(project), "", false)
         toolWindow.contentManager.addContent(content)
     }
 
-    private fun getPanelContent(project: Project, toolWindow: ToolWindow): JPanel = JPanel(BorderLayout()).apply {
+    private fun getPanelContent(project: Project): JPanel = JPanel(BorderLayout()).apply {
         val browser = getBrowser(getPathToHtml(project))
-        add(getControlsPanel(toolWindow, browser), BorderLayout.CENTER)
+        add(getControlsPanel(browser), BorderLayout.CENTER)
         add(browser.component, BorderLayout.SOUTH)
         browser.loadURL(getPathToHtml(project))
     }
@@ -47,22 +47,17 @@ class PreviewToolWindowFactory : ToolWindowFactory {
             "file://${file.path}/$BUILD_DIR/${config.tempProjectDirName}/$BUILD_DIR/dist/js/productionExecutable/index.html"
         }
 
-    @Suppress("UNUSED_PARAMETER")
-    private fun getControlsPanel(toolWindow: ToolWindow, cefBrowser: JBCefBrowser) = JPanel().apply {
-        val hideButton = JButton("Reload")
-        hideButton.addActionListener { _: ActionEvent? -> cefBrowser.cefBrowser.reloadIgnoreCache() }
+    private fun getControlsPanel(cefBrowser: JBCefBrowser) = JPanel().apply {
+        val hideButton = JButton("Reload").apply {
+            addActionListener { cefBrowser.cefBrowser.reloadIgnoreCache() }
+        }
         val zoomOutButton = JButton("-").apply {
-            addActionListener {
-                val currentZoom = cefBrowser.zoomLevel
-                cefBrowser.zoomLevel = currentZoom - ZOOM_VALUE
-            }
+            addActionListener { cefBrowser.zoomLevel -= ZOOM_VALUE }
         }
         val zoomInButton = JButton("+").apply {
-            addActionListener {
-                val currentZoom = cefBrowser.zoomLevel
-                cefBrowser.zoomLevel = currentZoom + ZOOM_VALUE
-            }
+            addActionListener { cefBrowser.zoomLevel += ZOOM_VALUE }
         }
+
         add(hideButton)
         add(zoomOutButton)
         add(zoomInButton)

@@ -1,6 +1,6 @@
 # Kotlin Js Preview
 
-![Version](https://img.shields.io/jetbrains/plugin/v/22801)
+![[Version](https://plugins.jetbrains.com/plugin/22801-kotlin-js-preview)](https://img.shields.io/jetbrains/plugin/v/22801)
 
 Kotlin Js Preview is a `Intellij Idea` plugin that provides a mechanism for previewing `Kotlin/JS` `React` functional components.
 

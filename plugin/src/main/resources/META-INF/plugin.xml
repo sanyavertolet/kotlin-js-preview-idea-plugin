@@ -8,18 +8,18 @@
             <br>
             Features:
             <ul>
-                <li> * Live Preview: Display a live preview of the Kotlin/JS React functional component as it's being developed. </li>
-                <li> * Theme Toggle: Switch between different themes or styles seamlessly to see how the component appears under various themes. </li>
-                <li> * No Source Code Corruption: Ensures that your source code remains unaltered. </li>
-                <li> * Settings: Configure the plugin by navigating to Settings -> Tools -> Kotlin JS Preview. </li>
+                <li> Live Preview: Display a live preview of the Kotlin/JS React functional component as it's being developed. </li>
+                <li> Theme Toggle: Switch between different themes or styles seamlessly to see how the component appears under various themes. </li>
+                <li> No Source Code Corruption: Ensures that your source code remains unaltered. </li>
+                <li> Settings: Configure the plugin by navigating to Settings -> Tools -> Kotlin JS Preview. </li>
             </ul>
         ]]>
     </description>
     <change-notes>
         <![CDATA[
             <ul>
-                <li> * Added a simple preview window</li>
-                <li> * Added @JsPreview annotation support</li>
+                <li> Added a simple preview window</li>
+                <li> Added @JsPreview annotation support</li>
             </ul>
         ]]>
     </change-notes>
@@ -57,6 +57,18 @@
                 factoryClass="com.sanyavertolet.kotlinjspreview.PreviewToolWindowFactory"
                 id="KotlinJsPreview"
                 anchor="right"
+        />
+
+        <localInspection
+                language="kotlin"
+                groupPath="Kotlin"
+                groupBundle="messages.InspectionsBundle"
+                groupKey="group.names.probable.bugs"
+                enabledByDefault="true"
+                implementationClass="com.sanyavertolet.kotlinjspreview.inspection.RootWrapperFirstArgumentInspection"
+                displayName="Root wrapper first argument"
+                shortName="RootWrapperFirstArgumentInspection"
+                runForWholeFile="true"
         />
     </extensions>
 </idea-plugin>

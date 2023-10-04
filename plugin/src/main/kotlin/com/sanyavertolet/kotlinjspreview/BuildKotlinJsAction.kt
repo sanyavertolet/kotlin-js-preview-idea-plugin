@@ -31,7 +31,6 @@ class BuildKotlinJsAction(
         val project = getEventProject(event) ?: return
 
         projectCopier.copy(project)
-
         substitutor.substitute(psiElement, project)
         builder.build(project)
 

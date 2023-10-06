@@ -70,5 +70,17 @@
                 shortName="RootWrapperFirstArgumentInspection"
                 runForWholeFile="true"
         />
+
+        <localInspection
+            language="kotlin"
+            groupPath="Kotlin"
+            groupBundle="messages.InspectionsBundle"
+            groupKey="group.names.probable.bugs"
+            enabledByDefault="true"
+            implementationClass="com.sanyavertolet.kotlinjspreview.inspection.RootWrapperCountsInspection"
+            displayName="RootWrapper count"
+            shortName="RootWrapperCountsInspection"
+            runForWholeFile="true"
+        />
     </extensions>
 </idea-plugin>

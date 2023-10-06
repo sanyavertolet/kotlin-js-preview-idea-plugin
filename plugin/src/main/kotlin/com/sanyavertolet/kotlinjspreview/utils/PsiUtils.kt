@@ -3,9 +3,13 @@
  */
 package com.sanyavertolet.kotlinjspreview.utils
 
+import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.idea.base.psi.kotlinFqName
+import org.jetbrains.kotlin.idea.base.util.projectScope
+import org.jetbrains.kotlin.idea.stubindex.KotlinAnnotationsIndex
+import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtProperty
 
 /**
@@ -47,3 +51,17 @@ fun PsiElement.isValOfPropertyAnnotatedWith(
  * @return fully-qualified name of [this] as [KtProperty]
  */
 fun PsiElement.getIdentifier() = (this as KtProperty).kotlinFqName
+
+/**
+ * Get usages of [this] [KtAnnotationEntry] in [project]
+ *
+ * @param project current [Project]
+ * @return [Collection] of usages or [emptyList] if none was found
+ */
+fun KtAnnotationEntry.getUsages(project: Project) = shortName?.let { annotationName ->
+    KotlinAnnotationsIndex.get(
+        annotationName.asString(),
+        project,
+        project.projectScope(),
+    )
+} ?: emptyList()

@@ -1,0 +1,14 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+
+module:core
+com.sanyavertolet.kotlinjspreview
+module:plugin
+com.sanyavertolet.kotlinjspreview
+com.sanyavertolet.kotlinjspreview.builder
+com.sanyavertolet.kotlinjspreview.config
+com.sanyavertolet.kotlinjspreview.copier
+com.sanyavertolet.kotlinjspreview.inspection
+com.sanyavertolet.kotlinjspreview.substituror
+com.sanyavertolet.kotlinjspreview.task
+com.sanyavertolet.kotlinjspreview.utils

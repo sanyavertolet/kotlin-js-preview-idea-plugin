@@ -4,6 +4,7 @@ import com.sanyavertolet.kotlinjspreview.buildutils.readFromPropertyOrEnv
 plugins {
     alias(libs.plugins.intellij)
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.dokka)
     id("java")
     id("com.sanyavertolet.kotlinjspreview.buildutils.code-quality-convention")
 }

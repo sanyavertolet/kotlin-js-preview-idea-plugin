@@ -20,7 +20,7 @@
         <![CDATA[
             <ul>
                 <li> Added two inspections for @RootWrapper annotation. </li>
-                <li> Added first version of <a href="https://sanyavertolet.github.io/kotlin-js-preview-idea-plugin/">documentation.</a>
+                <li> Added first version of <a href="https://sanyavertolet.github.io/kotlin-js-preview-idea-plugin/">documentation</a>.
             </ul>
         ]]>
     </change-notes>

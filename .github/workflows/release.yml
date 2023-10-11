@@ -39,7 +39,7 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: 'Publish a release of lib'
-        id: publish
+        id: publish-core
         uses: gradle/gradle-build-action@v2.9.0
         with:
             gradle-version: wrapper
@@ -50,7 +50,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Publish a release of plugin'
-        id: publish
+        id: publish-plugin
         uses: gradle/gradle-build-action@v2.9.0
         with:
           gradle-version: wrapper

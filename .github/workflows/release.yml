@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
 
       - name: 'Set up Java 17'
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: zulu
@@ -40,7 +40,7 @@ jobs:
 
       - name: 'Publish a release of lib'
         id: publish-core
-        uses: gradle/gradle-build-action@v2.9.0
+        uses: gradle/gradle-build-action@v2.10.0
         with:
             gradle-version: wrapper
             arguments: |
@@ -51,7 +51,7 @@ jobs:
 
       - name: 'Publish a release of plugin'
         id: publish-plugin
-        uses: gradle/gradle-build-action@v2.9.0
+        uses: gradle/gradle-build-action@v2.10.0
         with:
           gradle-version: wrapper
           arguments: |

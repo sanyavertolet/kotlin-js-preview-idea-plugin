@@ -1,6 +1,6 @@
 [versions]
 kotlin = "1.9.10"
-detekt = "1.23.4"
+detekt = "1.23.5"
 diktat = "1.2.5"
 reckon = "0.18.1"
 spotless = "6.25.0"

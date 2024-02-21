@@ -2,7 +2,7 @@
 kotlin = "1.9.10"
 detekt = "1.23.5"
 diktat = "1.2.5"
-reckon = "0.18.1"
+reckon = "0.18.3"
 spotless = "6.25.0"
 publish = "1.3.0"
 download = "5.5.0"

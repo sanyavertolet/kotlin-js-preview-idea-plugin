@@ -40,7 +40,7 @@ jobs:
 
       - name: 'Publish a release of lib'
         id: publish-core
-        uses: gradle/gradle-build-action@v3.1.0
+        uses: gradle/gradle-build-action@v3.3.1
         with:
             gradle-version: wrapper
             arguments: |
@@ -51,7 +51,7 @@ jobs:
 
       - name: 'Publish a release of plugin'
         id: publish-plugin
-        uses: gradle/gradle-build-action@v3.1.0
+        uses: gradle/gradle-build-action@v3.3.1
         with:
           gradle-version: wrapper
           arguments: |
